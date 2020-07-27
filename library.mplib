@@ -1,0 +1,12 @@
+{
+    "name": "Husci MP3 Library",
+    "ver": 1,
+    "ui": {
+        "x": 1710,
+        "y": 900
+    },
+    "playlists": [
+        "default.mpl"
+    ],
+    "last": "default.mpl"
+}

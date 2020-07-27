@@ -8,7 +8,9 @@ import json
 import os
 from os import path
 
+# Change this to location of library.mplib
 DEFAULT_LIBRARY = r"/home/alex/Music/library.mplib"
+
 STATE_STOPPED = 0
 STATE_PLAYING = 1
 STATE_PAUSED = 2
