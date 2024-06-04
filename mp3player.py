@@ -6,10 +6,11 @@ import random
 import pygame
 import json
 import os
-from os import path
+from types import LambdaType
+from os import path, getcwd
 
 # Change this to location of library.mplib
-DEFAULT_LIBRARY = r"/home/alex/Music/library.mplib"
+DEFAULT_LIBRARY = getcwd() + r"/mp3_settings.json"
 
 STATE_STOPPED = 0
 STATE_PLAYING = 1
@@ -18,6 +19,28 @@ LOOP_NO = 0
 LOOP_ONE = 1
 LOOP_ALL = 2
 
+class Option:
+    def __init__(self, value):
+        self.value = None if value == None else value
+
+    def map(self, funOrValue):
+        if not self.value:
+            return self
+        elif isinstance(funOrValue, LambdaType):
+            return Option(funOrValue(self.value))
+        else:
+            return Option(funOrValue)
+    
+    def orElse(self, funOrValue):
+        if self.value:
+            return self
+        elif isinstance(funOrValue, LambdaType):
+            return Option(funOrValue())
+        else:
+            return Option(funOrValue)
+    
+    def get(self):
+        return self.value
 
 class Tracker:
     def __init__(self, storage):
@@ -42,13 +65,16 @@ class Tracker:
             print(f"Saved to {self.library['last']}")
 
     def album(self):
-        return self.playlist['name'] if self.playlist else None
+        return self.playlist['name']
 
     def currentTrackPath(self):
-        return self.playlist['last'] if self.playlist else None
+        return Option(self.playlist['last']).orElse(self.firstTrack()).get()
 
     def currentTrack(self):
-        return path.basename(self.playlist['last']) if self.playlist else None
+        return Option(self.playlist['last']).orElse(self.firstTrack()).map(lambda p: path.basename(p)).get()
+        
+    def firstTrack(self):
+        return Option(self.playlist['songs']).map(lambda songs: songs[0] if len(songs) > 0 else None).get()
 
     def load(self, playlistFile):
         if path.isfile(playlistFile):
@@ -381,8 +407,8 @@ class Storage:
                     "x": 0,
                     "y": 0,
                  },
-                "playlists": ["library.mplib"],
-                "last": "library.mplib"
+                "playlists": ["list1.json"],
+                "last": "list1.json"
             }
         self.win_position = (self.library["ui"]["x"], self.library["ui"]["y"])
 

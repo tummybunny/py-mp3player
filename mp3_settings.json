@@ -1,0 +1,12 @@
+{
+    "name": "Default",
+    "ver": 1,
+    "ui": {
+        "x": 0,
+        "y": 0
+    },
+    "playlists": [
+        "list1.json"
+    ],
+    "last": "list1.json"
+}

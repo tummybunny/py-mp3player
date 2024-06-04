@@ -1,4 +1,5 @@
-bin
-include
-share
-lib
+Include
+Lib
+Scripts
+pyvenv.cfg
+.vscode
